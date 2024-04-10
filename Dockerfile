@@ -23,8 +23,7 @@ ENV LC_CTYPE=en_US.UTF-8
 # ------------------------------------
 RUN <<EOF
 apt-get update 
-apt-get install -y curl wget git build-essential xz-utils bat exa software-properties-common sudo sshpass
-apt-get -y install hey
+apt-get install -y curl wget git build-essential xz-utils bat exa software-properties-common sudo sshpass hey jq
 ln -s /usr/bin/batcat /usr/bin/bat
 
 apt-get clean autoclean
