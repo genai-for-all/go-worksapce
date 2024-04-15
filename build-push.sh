@@ -12,9 +12,9 @@ docker buildx build \
 --build-arg="GO_VERSION=1.22.1" \
 --build-arg="NODE_MAJOR=21" \
 --build-arg="USER_NAME=genai-for-all" \
---push -t k33g/genai-go-workspace:0.0.1 .
+--push -t k33g/genai-go-workspace:0.0.2 .
 
-docker pull k33g/genai-go-workspace:0.0.1
+docker pull k33g/genai-go-workspace:0.0.2
 docker images | grep golang-workspace
 
 

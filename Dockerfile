@@ -32,6 +32,15 @@ rm -rf /var/lib/{apt,dpkg,cache,log}/
 EOF
 
 # ------------------------------------
+# Install Helix
+# ------------------------------------
+RUN <<EOF
+add-apt-repository ppa:maveonair/helix-editor
+apt update
+apt install helix
+EOF
+
+# ------------------------------------
 # Install Docker
 # ------------------------------------
 RUN <<EOF
@@ -70,13 +79,18 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOPATH="/home/${USER_NAME}/go"
 ENV GOROOT="/usr/local/go"
 
+
 RUN <<EOF
 go version
-go install -v golang.org/x/tools/gopls@latest
+go install -v golang.org/x/tools/gopls@latest       # LSP
+go install github.com/go-delve/delve/cmd/dlv@latest # Debugger
+go install golang.org/x/tools/cmd/goimports@latest  # Formatter
 go install -v github.com/ramya-rao-a/go-outline@latest
 go install -v github.com/stamblerre/gocode@v1.0.0
 go install -v github.com/mgechev/revive@v1.3.2
 EOF
+
+#ENV PATH="${PATH}:$(go env GOPATH)/bin"
 
 # ------------------------------------
 # Install NodeJS
@@ -120,6 +134,9 @@ EOF
 
 # Switch to the regular user
 USER ${USER_NAME}
+
+#ENV PATH=$PATH:$HOME/go/bin
+ENV PATH="${PATH}:/home/${USER_NAME}/go/bin"
 
 # Avoid the message about sudo
 RUN touch ~/.sudo_as_admin_successful
