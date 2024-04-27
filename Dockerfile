@@ -1,4 +1,8 @@
 FROM ubuntu:23.10
+#FROM debian:12.5
+#TODO: try with debian:12.5
+#TODO: reduce the size of the image
+#FROM ubuntu:24.04
 #FROM --platform=$BUILDPLATFORM ubuntu
 #FROM --platform=$BUILDPLATFORM ubuntu:23.10
 
@@ -38,6 +42,10 @@ RUN <<EOF
 add-apt-repository ppa:maveonair/helix-editor
 apt update
 apt install helix
+
+apt-get clean autoclean
+apt-get autoremove --yes
+rm -rf /var/lib/{apt,dpkg,cache,log}/
 EOF
 
 # ------------------------------------
@@ -58,6 +66,10 @@ echo \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+apt-get clean autoclean
+apt-get autoremove --yes
+rm -rf /var/lib/{apt,dpkg,cache,log}/
 EOF
 
 
@@ -104,6 +116,15 @@ apt-get update && apt-get install nodejs -y
 apt-get clean autoclean
 apt-get autoremove --yes
 rm -rf /var/lib/{apt,dpkg,cache,log}/
+EOF
+
+# ------------------------------------
+# Install Python
+# ------------------------------------
+# run chroma: pipx run chromadb run --path ./
+RUN <<EOF
+apt-get update && apt-get install -y python3-full python3-pip python3-distutils python3-apt pipx
+pipx install chromadb
 EOF
 
 # ------------------------------------
