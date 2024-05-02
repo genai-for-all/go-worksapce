@@ -12,14 +12,17 @@ build, tag, and push images using the BuildKit engine, which provides improved p
 > ```
 END_COMMENT
 
-VERSION=0.0.4
+VERSION=0.0.5
 
 docker buildx build \
 --platform=linux/amd64,linux/arm64 \
 --build-arg="GO_VERSION=1.22.1" \
+--build-arg="TINYGO_VERSION=0.31.1" \
+--build-arg="EXTISM_VERSION=1.3.0" \
 --build-arg="NODE_MAJOR=21" \
 --build-arg="USER_NAME=genai-for-all" \
 --push -t k33g/genai-go-workspace:${VERSION} .
+
 
 docker pull k33g/genai-go-workspace:${VERSION}
 docker images | grep golang-workspace

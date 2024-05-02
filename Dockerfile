@@ -12,6 +12,8 @@ ARG TARGETOS
 ARG TARGETARCH
 
 ARG GO_VERSION=${GO_VERSION}
+ARG TINYGO_VERSION=${TINYGO_VERSION}
+ARG EXTISM_VERSION=${EXTISM_VERSION}
 ARG NODE_MAJOR=${NODE_MAJOR}
 
 ARG USER_NAME=${USER_NAME}
@@ -104,6 +106,29 @@ EOF
 
 #ENV PATH="${PATH}:$(go env GOPATH)/bin"
 
+
+# ------------------------------------
+# Install TinyGo
+# ------------------------------------
+RUN <<EOF
+wget https://github.com/tinygo-org/tinygo/releases/download/v${TINYGO_VERSION}/tinygo_${TINYGO_VERSION}_${TARGETARCH}.deb
+dpkg -i tinygo_${TINYGO_VERSION}_${TARGETARCH}.deb
+rm tinygo_${TINYGO_VERSION}_${TARGETARCH}.deb
+EOF
+  
+# ------------------------------------
+# Install Extism CLI
+# ------------------------------------
+RUN <<EOF
+  wget https://github.com/extism/cli/releases/download/v${EXTISM_VERSION}/extism-v${EXTISM_VERSION}-linux-${TARGETARCH}.tar.gz
+  
+  tar -xf extism-v${EXTISM_VERSION}-linux-${TARGETARCH}.tar.gz -C /usr/bin
+  rm extism-v${EXTISM_VERSION}-linux-${TARGETARCH}.tar.gz
+  
+  extism --version
+EOF
+  
+
 # ------------------------------------
 # Install NodeJS
 # ------------------------------------
@@ -121,10 +146,8 @@ EOF
 # ------------------------------------
 # Install Python
 # ------------------------------------
-# run chroma: pipx run chromadb run --path ./
 RUN <<EOF
 apt-get update && apt-get install -y python3-full python3-pip python3-distutils python3-apt pipx
-pipx install chromadb
 EOF
 
 # ------------------------------------
@@ -161,6 +184,14 @@ ENV PATH="${PATH}:/home/${USER_NAME}/go/bin"
 
 # Avoid the message about sudo
 RUN touch ~/.sudo_as_admin_successful
+
+# ------------------------------------
+# Install ChromaDb
+# ------------------------------------
+# run chroma: pipx run chromadb run --path ./
+RUN <<EOF
+pipx install chromadb
+EOF
 
 # ------------------------------------
 # Install OhMyBash
