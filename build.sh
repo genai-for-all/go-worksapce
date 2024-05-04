@@ -22,10 +22,8 @@ docker buildx build \
 --build-arg="EXTISM_VERSION=${EXTISM_VERSION}" \
 --build-arg="NODE_MAJOR=${NODE_MAJOR}" \
 --build-arg="USER_NAME=${USER_NAME}" \
---push -t k33g/genai-go-workspace:${VERSION} .
+-t k33g/genai-go-workspace:${VERSION} .
 
-
-docker pull k33g/genai-go-workspace:${VERSION}
 docker images | grep golang-workspace
 
 

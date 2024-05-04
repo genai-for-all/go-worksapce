@@ -186,11 +186,24 @@ ENV PATH="${PATH}:/home/${USER_NAME}/go/bin"
 RUN touch ~/.sudo_as_admin_successful
 
 # ------------------------------------
-# Install ChromaDb
+# Install ChromaDb and Jupyter
 # ------------------------------------
 # run chroma: pipx run chromadb run --path ./
 RUN <<EOF
 pipx install chromadb
+pipx install jupyterlab
+pipx install notebook
+pipx ensurepath
+EOF
+
+# ------------------------------------
+# Install GoNB
+# ------------------------------------
+RUN <<EOF
+go install github.com/janpfeifer/gonb@latest
+go install golang.org/x/tools/cmd/goimports@latest
+go install golang.org/x/tools/gopls@latest
+gonb --install
 EOF
 
 # ------------------------------------
